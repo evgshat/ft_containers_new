@@ -1,20 +1,23 @@
-NAME	= ft_containers
-SRCS	= main.cpp
-OBJ		= $(SRCS: cpp=.o)
-CC		= clang++
-FLAGS	= -Wall -Wextra -Werror -std=c++98
-RM		= rm -f
-HEADERS	= ft_stack.hpp ft_containers.hpp
+NAME	=	ft_containers
+CC		=	clang++
+FLAGS	=	-Wall -Wextra -Werror -std=c++98
+SRCS	=	main.cpp
+OBJS	=	${SRCS:.cpp=.o}
+RM		=	rm -rf
+HEADERS	=	ft_stack.hpp ft_containers.hpp
 
-$(NAME):	$(OBJ)
-			$(CC) $(FLAGS) -o $(NAME) $(OBJ)
+all: ${NAME}
 
-all:		$(NAME)
+${NAME}: ${OBJS}
+	${CC} ${FLAGS} $^ -o $@
+
+%.o: %.cpp Makefile ${HEADERS}
+	${CC} ${FLAGS} -c $< -o $@
 
 clean:
-			$(RM) $(OBJ)
+	${RM} ${OBJS}
 
-fclean:		clean
-			$(RM) $(NAME)
+fclean: clean
+	${RM} ${NAME}
 
-re:			fclean all
+re: fclean all
