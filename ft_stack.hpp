@@ -15,7 +15,7 @@ namespace ft
 		protected:
 			container_type c;
 		public:
-			explicit stack(const container_type& ct = container_type()): c(ct) {} // = container_type()?
+			explicit stack(const container_type& ct = container_type()): c(ct) {}
 			bool empty() const
 			{
 				return c.empty();
@@ -28,7 +28,6 @@ namespace ft
 			{
 				return c.back();
 			}
-			// почему два метода?
 			const value_type& top() const
 			{
 				return c.back();
@@ -49,7 +48,6 @@ namespace ft
 			friend bool operator< (const stack<T1, Container1>& st1, const stack<T1, Container1>& st2);
 	};
 
-	// разве ф-ии не должны быть константными?
 	template <class T1, class Container1>
 	bool operator== (const stack<T1, Container1>& st1, const stack<T1, Container1>& st2)
 	{
@@ -88,5 +86,3 @@ namespace ft
 } // namespace ft end
 
 #endif
-
-//деструктор?
