@@ -2,7 +2,11 @@
 
 void test_for_vector()
 {
-
+    std::cout << "hello_vector" << std::endl;
+    ft::vector<int> a;
+    a.size();
+    a.empty();
+    std::cout << "is empty? - " << (a.empty()) << std::endl;
 }
 
 void test_for_stack()
@@ -39,7 +43,7 @@ void test_for_stack()
 
 int main()
 {
-    std::cout << "hello" << std::endl;
+    // std::cout << "hello_main" << std::endl;
     // test_for_stack();
     test_for_vector();
 }
