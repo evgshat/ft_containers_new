@@ -2,11 +2,21 @@
 
 void test_for_vector()
 {
-    std::cout << "hello_vector" << std::endl;
+    // std::cout << "hello_vector" << std::endl;
     ft::vector<int> a;
-    a.size();
+     std::cout << "size? - " << a.size() << std::endl;
+    std::cout << "old_capacity - " << a.capacity() << std::endl;
     a.empty();
     std::cout << "is empty? - " << (a.empty()) << std::endl;
+    std::cout << "is max_size? - " << a.max_size() << std::endl;
+    // try { a.reserve(4611686018427387904); }
+    //  catch(const std::exception& e){ std::cerr << e.what() << '\n';} // исключение
+    // try { a.reserve(0); }
+    //  catch(const std::exception& e){ std::cerr << e.what() << '\n'; } // ничего
+    try { a.reserve(150); }
+     catch(const std::exception& e){ std::cerr << e.what() << '\n';  } // перераспрделение памяти
+    std::cout << "new_capacity - " << a.capacity() << std::endl;
+    
 }
 
 void test_for_stack()
