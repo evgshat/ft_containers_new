@@ -12,14 +12,15 @@ namespace ft
     class vector
     {
         public:
-            typedef T                                        value_type;
-            typedef Allocator                                allocator_type;
-            typedef typename allocator_type::reference       reference;
-            typedef typename allocator_type::const_reference const_reference;
-            typedef typename allocator_type::pointer         pointer;
-            typedef typename allocator_type::const_pointer   const_pointer;
-            typedef typename std::size_t                     size_type;
-            // дописать итераторы
+            typedef T                                                       value_type;
+            typedef Allocator                                               allocator_type;
+            typedef typename allocator_type::reference                      reference;
+            typedef typename allocator_type::const_reference                const_reference;
+            typedef typename allocator_type::pointer                        pointer;
+            typedef typename allocator_type::const_pointer                  const_pointer; 
+            typedef typename std::size_t                                    size_type;
+            typedef typename ft::iterator_traits<pointer>::pointer          iterator;
+            typedef typename ft::iterator_traits<const_pointer>::pointer    const_iterator;
         private:
 				pointer			pbegin;
 				pointer			pend;
@@ -47,17 +48,18 @@ namespace ft
                 // реализация функций
                                             // constructions
     template<class T, class Allocator>
-    vector<T, Allocator>::vector(size_type n, const value_type& val, const allocator_type& Alloc)
+    vector<T, Allocator>::vector(size_type n, const value_type& val, const allocator_type& Alloc): alloc(Alloc)
     {
-        Alloc<val> new_alloc;
-        this->alloc.allocator(new_alloc); // как вызывать конструктор?верно?
-        this->pbegin = this->alloc.allocate(n, new_alloc); // надо еще что-то?
+        if (n > this->max_size())
+            throw std::length_error("New value more than max size");
+        this->pbegin = this->alloc.allocate(n);
+        int i = 0;
         for(; n != 0; n--)
         {
-            int i = 0;
-            this->allocate.construct(this->pbegin + i, 0);
+            this->alloc.construct(this->pbegin + i, val);
             i++;
-        }  
+        }
+        this->pend = this->pcapacity = this->pbegin + i;
     }
 
                                             // capacity
@@ -106,9 +108,9 @@ namespace ft
             size_t size_for_capacity = size_for_construct;
 
             new_pbegin = this->alloc.allocate(n);
+            int i = 0;
             for (; size_for_construct != 0; size_for_construct--)
             {
-                int i = 0;
                 this->alloc.construct(new_pbegin + i, *(this->pbegin + i));
                 i++;
             }
@@ -119,25 +121,6 @@ namespace ft
             this->pend = new_pbegin + size_for_capacity;
             this->pcapacity = new_pbegin + n; 
         }
-        
-        // else if (n > this->capacity() )
-        // {
-        //     pointer new_pbegin;
-        //     pointer temp = this->pbegin;
-
-        //     new_pbegin = this->alloc.allocate(n);
-        //     //  конструктор. обязательно? не могу просто пернести значения? как конструктор вектора работает?
-        //     this->pbegin = new_pbegin;
-        //     for (; temp < this->pend; temp++)
-        //     {
-        //         *new_pbegin = *temp;
-        //         new_pbegin++;
-        //     }
-        //     this->alloc.deallocate(this->pbegin, this->capacity());
-        //     this->pend = new_pbegin;
-        //     this->pcapacity = this->pbegin + n;
-        //     std::cout << "reverse" << std::endl;
-        // };
     }
 
 }

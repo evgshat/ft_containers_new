@@ -16,6 +16,11 @@ void test_for_vector()
     try { a.reserve(150); }
      catch(const std::exception& e){ std::cerr << e.what() << '\n';  } // перераспрделение памяти
     std::cout << "new_capacity - " << a.capacity() << std::endl;
+
+    // создаю вектор с конструктором fill
+    ft::vector<int> b(20);
+    std::cout << "size b? - " << b.size() << std::endl;
+    std::cout << "capacity b? - " << b.capacity() << std::endl;
     
 }
 

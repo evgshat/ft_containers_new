@@ -76,6 +76,13 @@
         "*.tcc": "cpp",
         "memory_resource": "cpp",
         "ranges": "cpp",
-        "stop_token": "cpp"
+        "stop_token": "cpp",
+        "__tree": "cpp",
+        "codecvt": "cpp",
+        "csignal": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp",
+        "map": "cpp",
+        "set": "cpp"
     }
 }
