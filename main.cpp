@@ -1,4 +1,21 @@
 #include "ft_containers.hpp"
+#include <iterator>
+
+void test_for_iterators()
+{
+    ft::reverse_iterator<int*> iter;
+    std::cout << iter.base() << std::endl;
+
+    std::vector<int> v(2);
+    v.push_back(11);
+    ft::reverse_iterator<std::vector<int>::iterator> rit(v.begin());
+    std::cout << rit.base() << std::endl;
+
+    // int a;
+    // ft::reverse_iterator<int> a;
+    // ft::reverse_iterator<int> a(x);
+
+}
 
 void test_for_vector()
 {
@@ -21,7 +38,6 @@ void test_for_vector()
     ft::vector<int> b(20);
     std::cout << "size b? - " << b.size() << std::endl;
     std::cout << "capacity b? - " << b.capacity() << std::endl;
-    
 }
 
 void test_for_stack()
@@ -60,5 +76,6 @@ int main()
 {
     // std::cout << "hello_main" << std::endl;
     // test_for_stack();
-    test_for_vector();
+    // test_for_vector();
+    test_for_iterators();
 }

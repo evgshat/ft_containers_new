@@ -21,6 +21,7 @@ namespace ft
             typedef typename std::size_t                                    size_type;
             typedef typename ft::iterator_traits<pointer>::pointer          iterator;
             typedef typename ft::iterator_traits<const_pointer>::pointer    const_iterator;
+            
         private:
 				pointer			pbegin;
 				pointer			pend;
