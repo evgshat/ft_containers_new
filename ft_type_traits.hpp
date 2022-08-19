@@ -41,3 +41,9 @@ namespace ft
 			}	
 	};
 }
+
+
+void insert (iterator position, size_type n, const value_type& val);
+
+template <class InputIterator>
+void insert (iterator position, InputIterator first, InputIterator last);
