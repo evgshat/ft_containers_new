@@ -3,29 +3,14 @@
 
 void test_for_iterators()
 {
-    ft::reverse_iterator<int*> iter;
-    std::cout << iter.base() << std::endl;
+    // ft::reverse_iterator<int*> iter;
+    // std::cout << iter.base() << std::endl;
 
-//       std::vector<int> myvector;
-//   for (int i=0; i<10; i++) myvector.push_back(i);
+    std::vector<int> vect;
+    for (int i = 0; i < 20; i+= 2)
+        vect.push_back(i);
+    ft::reverse_iterator<std::vector<int>::iterator> iter;
 
-//   typedef std::vector<int>::iterator iter_type;
-//                                                          // ? 9 8 7 6 5 4 3 2 1 0 ?
-//   iter_type from (myvector.begin());                     //   ^
-//                                                          //         ------>
-//   iter_type until (myvector.end());                      //                       ^
-//                                                          //
-//   ft::reverse_iterator<iter_type> rev_until (from);     // ^
-//                                                          //         <------
-//   ft::reverse_iterator<iter_type> rev_from (until);     //                     ^
-
-//   std::cout << "myvector:";
-//   std::cout << ' ' << from;
-//   std::cout << ' ' << rev_from;
-//   //
-// //   while (rev_from != rev_until)
-// //     std::cout << ' ' << *rev_from++;
-// //   std::cout << '\n';
 }
 
 void test_for_vector()

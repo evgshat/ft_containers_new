@@ -75,7 +75,7 @@ namespace ft
 		template <class Iterator>
 		typename reverse_iterator<Iterator>::iterator_type reverse_iterator<Iterator>::base() const
 		{
-			return this->current + 1; // ?
+			return this->current;
 		}
 
 		template <class Iterator>
