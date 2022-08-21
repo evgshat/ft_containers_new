@@ -6,6 +6,8 @@
 
 #include "ft_stack.hpp"
 #include "ft_iterator.hpp"
+#include "ft_type_traits.hpp"
 #include "ft_vector.hpp"
+
 
 #endif

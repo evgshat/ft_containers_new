@@ -4,8 +4,8 @@
 void test_for_vector_iterators()
 {
     ft::vector<int> a;
-    ft::reverse_iterator<ft::vector<int>::iterator> first_iter;
-    ft::reverse_iterator<ft::vector<int>::iterator> last_iter;
+    ft::vector<int>::iterator first_iter;
+    ft::vector<int>::iterator last_iter;
 
     ft::vector<int> my_vec(first_iter, last_iter);
     std::cout << my_vec.size() << std::endl;
@@ -86,5 +86,5 @@ int main()
     // test_for_stack();
     // test_for_vector();
     // test_for_iterators();
-    test_for_vector_iterators;
+    test_for_vector_iterators();
 }
