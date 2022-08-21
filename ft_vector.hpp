@@ -62,6 +62,21 @@ namespace ft
         }
         this->pend = this->pcapacity = this->pbegin + i;
     }
+                                            //
+    template <class T, class Allocator>
+    template <class InputIterator>
+    vector<T, Allocator>::vector (InputIterator first, InputIterator last, const allocator_type&)
+    {
+        InputIterator temp = first;
+        // first, first++ ... last
+        size_type size = 0;
+        for (; temp < last; temp++)
+        {
+            this->alloc.construct(this->pbegin, temp); // 0?
+            size++;
+        }
+        this->alloc.allocate(size, this->pbegin); 
+    }
 
                                             // capacity
     template <class T, class Allocator>

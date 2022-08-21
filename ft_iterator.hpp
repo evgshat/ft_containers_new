@@ -58,6 +58,7 @@ namespace ft
 			
 			template <class U>
 			reverse_iterator& operator=(const reverse_iterator<U>& other);
+			
 			reference operator*() const;
 			reverse_iterator operator+(difference_type n) const;
 			reverse_iterator& operator++();

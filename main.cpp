@@ -1,6 +1,16 @@
 #include "ft_containers.hpp"
 #include <iterator>
 
+void test_for_vector_iterators()
+{
+    ft::vector<int> a;
+    ft::reverse_iterator<ft::vector<int>::iterator> first_iter;
+    ft::reverse_iterator<ft::vector<int>::iterator> last_iter;
+
+    ft::vector<int> my_vec(first_iter, last_iter);
+    std::cout << my_vec.size() << std::endl;
+}
+
 void test_for_iterators()
 {
     // ft::reverse_iterator<int*> iter;
@@ -9,8 +19,10 @@ void test_for_iterators()
     std::vector<int> vect;
     for (int i = 0; i < 20; i+= 2)
         vect.push_back(i);
-    ft::reverse_iterator<std::vector<int>::iterator> iter;
-
+    // std::cout << vect[0] << std::endl;
+    // std::cout << vect[1] << std::endl;
+    // std::cout << vect[2] << std::endl;
+    // std::cout << vect[3] << std::endl;
 }
 
 void test_for_vector()
@@ -73,5 +85,6 @@ int main()
     // std::cout << "hello_main" << std::endl;
     // test_for_stack();
     // test_for_vector();
-    test_for_iterators();
+    // test_for_iterators();
+    test_for_vector_iterators;
 }
