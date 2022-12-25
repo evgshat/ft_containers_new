@@ -1,11 +1,17 @@
-// полезная инфа
+//                                           полезная инфа:
 // 1. pointer pend указывает не на последний эл-т в векторе, а на область за ним
+
+//                                              вопросы:
+// заяем функция clear, если есть деструктор?
+// допустим, хочу вызвать reserve или size, как понять, this.size  или rhis->size ? путаюсь
+// push_back(const T& value) - есть ли разница, использовать T или value_type?
+//вместо int лучше size_type?
+// почему в for лучше ++i, чем i++?  в for же они вроде работют одинаково. или нет????!
 
 #ifndef FT_VECTOR_HPP
 #define FT_VECTOR_HPP
 
 #include "ft_containers.hpp"
-
 namespace ft
 {
     template <class T, class Allocator = std::allocator<T> >
@@ -18,7 +24,7 @@ namespace ft
             typedef typename allocator_type::const_reference                const_reference;
             typedef typename allocator_type::pointer                        pointer;
             typedef typename allocator_type::const_pointer                  const_pointer; 
-            typedef typename std::size_t                                    size_type;
+            typedef typename std::size_t                                    size_type; // нахера? если могу использовать size_t
             typedef typename ft::iterator_traits<pointer>::pointer          iterator;
             typedef typename ft::iterator_traits<const_pointer>::pointer    const_iterator;
             
@@ -27,35 +33,29 @@ namespace ft
 				pointer			pend;
 				pointer			pcapacity;
 				allocator_type	alloc;
-        public:
-                
+        public:     
             explicit vector (const allocator_type& Alloc = allocator_type()): pbegin(0), pend(0), pcapacity(0), alloc(Alloc) {};
             explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& Alloc = allocator_type());
-            template <class InputIterator>
-                     vector (
-                         typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type first,
-                         InputIterator last, const allocator_type& alloc = allocator_type());
-                     vector (const vector& x);
-        
+            template <class InputIterator> vector (
+                        typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type first,
+                        InputIterator last, const allocator_type& alloc = allocator_type());
+            vector (const vector& x);
             ~vector ();
-                    
             vector& operator= (const vector& x);
-
             size_type size() const;
             bool empty() const;
             size_type max_size() const;
             size_type capacity() const;
             void reserve(size_t n);
-
-            vector& operator=( const vector& other );
-
+            // assign
             void assign(size_type count, const T& value);
-            template< class InputIt >
-            void assign(InputIt first, InputIt last);
-
+            template <class InputIterator> 
+            void assign (InputIterator first, InputIterator last);
+            void clear();
+            void push_back(const value_type& value);
     };
 
-                // реализация функций
+                                            // реализация функций
                                             // constructions
     template<class T, class Allocator>
     vector<T, Allocator>::vector(size_type n, const value_type& val, const allocator_type& Alloc): pbegin(0), pend(0), pcapacity(0), alloc(Alloc)
@@ -88,23 +88,22 @@ namespace ft
         this->alloc.allocate(size, this->pbegin); 
         for (; temp2 < last; temp2++)
             this->alloc.construct(this->pbegin, temp2); 
-        
     }
     //
-    template <class T, class Allocator>
-    vector<T, Allocator>::vector (const vector& x): pbegin(0), pend(0), pcapacity(0), alloc(x.alloc)
-    {
-        size_type new_size = x.size();
-        this->alloc.allocate(new_size, this->pbegin);
-        // for (pointer temp = x.pbegin; temp < x.pend; temp++)
-        // {
-        //     this->alloc.construct(temp, *temp);
-        // }
-        // this->pcapacity = this->pend = this->pbegin + new_size;
-        for (size_type n = 0, this->pend = this->pbegin; n < x.size(); n++, this->pend++)
-            this->alloc.construct(this->pend, *(x.pbegin + n));
-        this->pcapacity = this->pend;
-    }
+    // template <class T, class Allocator>
+    // vector<T, Allocator>::vector (const vector& x): pbegin(0), pend(0), pcapacity(0), alloc(x.alloc)
+    // {
+    //     size_type new_size = x.size();
+    //     this->alloc.allocate(new_size, this->pbegin);
+    //     // for (pointer temp = x.pbegin; temp < x.pend; temp++)
+    //     // {
+    //     //     this->alloc.construct(temp, *temp);
+    //     // }
+    //     // this->pcapacity = this->pend = this->pbegin + new_size;
+    //     for (size_type n = 0, this->pend = this->pbegin; n < x.size(); n++, this->pend++)
+    //         this->alloc.construct(this->pend, *(x.pbegin + n));
+    //     this->pcapacity = this->pend;
+    // }
                                             // destructor
     template <class T, class Allocator>
     vector<T, Allocator>::~vector()
@@ -134,20 +133,21 @@ namespace ft
         return *this;
      }
 
-                                            // assign
+                                            // fill_assign
     template <class T, class Allocator>
     void vector<T, Allocator>::assign(size_type count, const T& value)
     {
-
+        this->clear();
+        for (int i = 0; i < count; i++)
+            this->push_back(value);
     }
-                                            //
+                                            // range_assign
     template <class T, class Allocator>
-    template <class InputIt>
-    void vector<T, Allocator>assign(InputIt first, InputIt last)
+    template <class InputIterator>
+    void vector<T, Allocator>::assign(InputIterator first, InputIterator last)
     {
-
+        
     }
-
                                             // capacity
     template <class T, class Allocator>
     typename vector<T, Allocator>::size_type vector<T, Allocator>::size() const // перепроверить реализацию
@@ -207,6 +207,28 @@ namespace ft
             this->pend = new_pbegin + size_for_capacity;
             this->pcapacity = new_pbegin + n; 
         }
+    }
+
+    template<class T, class Allocate>
+    void vector<T, Allocate>::clear()
+    {
+        pointer temp = this->pbegin;
+        for (; temp < pend; temp++)
+        {
+            alloc.destroy(temp);
+        }
+        alloc.deallocate(this->pbegin, this->capacity);
+        this->pbegin = this->pend = this->capacity = 0;
+    }
+
+    template<class T, class Allocator>
+    void vector<T, Allocator>::push_back(const value_type& value)
+    {
+        size_type for_new_capacity = this->pcapacity - this->pbegin;
+        if (this->pend == this->pcapacity) // может ли каким-то раком pend быть больше capacity?
+            this->reserve(2 * (for_new_capacity > 0 ? for_new_capacity : 1)); // если for_new_capacity > 0, то подставляем for_new_capacity, иначе - подставляем 1
+        this->alloc.construct(this->pend, value); // надо прибавлять capacity?
+        ++this->pend;
     }
 
 }

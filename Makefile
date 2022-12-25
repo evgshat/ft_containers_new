@@ -4,7 +4,11 @@ FLAGS	=	-Wall -Wextra -Werror -std=c++98
 SRCS	=	main.cpp
 OBJS	=	${SRCS:.cpp=.o}
 RM		=	rm -rf
-HEADERS	=	ft_containers.hpp ft_stack.hpp ft_vector.hpp ft_iterator.hpp
+HEADERS	=	 t_stack.hpp 
+
+# ft_vector.hpp
+# ft_containers.hpp
+# ft_iterator.hpp
 
 all: ${NAME}
 
