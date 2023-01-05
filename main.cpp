@@ -84,7 +84,10 @@
 
 int main()
 {
-    std::cout << "hello_main" << std::endl;
+    // std::cout << "hello_main" << std::endl;
+    int i = 1;
+    i = i++ + ++i;
+    std::cout << i << std::endl;
     // test_for_stack();
     // test_for_vector();
     // test_for_iterators();

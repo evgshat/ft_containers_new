@@ -2,11 +2,29 @@
 // 1. pointer pend указывает не на последний эл-т в векторе, а на область за ним
 
 //                                              вопросы:
-// заяем функция clear, если есть деструктор?
-// допустим, хочу вызвать reserve или size, как понять, this.size  или rhis->size ? путаюсь
+// заяем функция clear, если есть деструктор? ответ: используется для очищения массива, но классом можно продолжить пользоаватьсч. а если вызвать деструктор - то придется новый класс делать
+// допустим, хочу вызвать reserve или size, как понять, this.size  или rhis->size ? путаюсь ответ: this - это указатель сам на себя, поэтому стрелочка. по остальным переменным смотреть, чем они явл (указатель или нет)
 // push_back(const T& value) - есть ли разница, использовать T или value_type?
 //вместо int лучше size_type?
 // почему в for лучше ++i, чем i++?  в for же они вроде работют одинаково. или нет????!
+// ответ:
+    //  // delete after ++
+    //  template <class T, class Allocator>
+    //  int vector<T, Allocator>::operator++(int n)
+    //  {
+    //      int temp = this->i;
+    //      this->i = this->i + 1;
+    //      return temp;
+    //  }
+
+    // // delete before ++
+    //  template <class T, class Allocator>
+    //  int vector<T, Allocator>::operator++()
+    //  {
+    //     this->i = this->i + 1;
+    //     return this->i;
+    //  }
+// поле private - allocator_type	alloc; // 
 
 #ifndef FT_VECTOR_HPP
 #define FT_VECTOR_HPP
@@ -24,7 +42,7 @@ namespace ft
             typedef typename allocator_type::const_reference                const_reference;
             typedef typename allocator_type::pointer                        pointer;
             typedef typename allocator_type::const_pointer                  const_pointer; 
-            typedef typename std::size_t                                    size_type; // нахера? если могу использовать size_t
+            typedef typename std::size_t                                    size_type;
             typedef typename ft::iterator_traits<pointer>::pointer          iterator;
             typedef typename ft::iterator_traits<const_pointer>::pointer    const_iterator;
             
@@ -34,7 +52,7 @@ namespace ft
 				pointer			pcapacity;
 				allocator_type	alloc;
         public:     
-            explicit vector (const allocator_type& Alloc = allocator_type()): pbegin(0), pend(0), pcapacity(0), alloc(Alloc) {};
+            explicit vector (const allocator_type& Alloc = allocator_type()): pbegin(0), pend(0), pcapacity(0), alloc(Alloc) {}; // уже реализован
             explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& Alloc = allocator_type());
             template <class InputIterator> vector (
                         typename ft::enable_if<!is_integral<InputIterator>::value, InputIterator>::type first,
@@ -53,6 +71,7 @@ namespace ft
             void assign (InputIterator first, InputIterator last);
             void clear();
             void push_back(const value_type& value);
+            allocator_type get_allocator() const;
     };
 
                                             // реализация функций
@@ -89,21 +108,16 @@ namespace ft
         for (; temp2 < last; temp2++)
             this->alloc.construct(this->pbegin, temp2); 
     }
-    //
-    // template <class T, class Allocator>
-    // vector<T, Allocator>::vector (const vector& x): pbegin(0), pend(0), pcapacity(0), alloc(x.alloc)
-    // {
-    //     size_type new_size = x.size();
-    //     this->alloc.allocate(new_size, this->pbegin);
-    //     // for (pointer temp = x.pbegin; temp < x.pend; temp++)
-    //     // {
-    //     //     this->alloc.construct(temp, *temp);
-    //     // }
-    //     // this->pcapacity = this->pend = this->pbegin + new_size;
-    //     for (size_type n = 0, this->pend = this->pbegin; n < x.size(); n++, this->pend++)
-    //         this->alloc.construct(this->pend, *(x.pbegin + n));
-    //     this->pcapacity = this->pend;
-    // }
+                                     //
+    template <class T, class Allocator> // перепроверить реализацию
+    vector<T, Allocator>::vector (const vector& x): pbegin(0), pend(0), pcapacity(0), alloc(x.alloc)
+    {
+        size_type new_size = x.size();
+        this->alloc.allocate(new_size, this->pbegin);
+        for (size_type n = 0; n < new_size; n++, this->pend++)
+            this->alloc.construct(this->pend, *(x.pbegin + n));
+        this->pcapacity = this->pend;
+    }
                                             // destructor
     template <class T, class Allocator>
     vector<T, Allocator>::~vector()
@@ -138,7 +152,7 @@ namespace ft
     void vector<T, Allocator>::assign(size_type count, const T& value)
     {
         this->clear();
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < count; ++i)
             this->push_back(value);
     }
                                             // range_assign
@@ -146,7 +160,9 @@ namespace ft
     template <class InputIterator>
     void vector<T, Allocator>::assign(InputIterator first, InputIterator last)
     {
-        
+        this->clear();
+        for (; first != last; first++)
+            this->push_back(*first);
     }
                                             // capacity
     template <class T, class Allocator>
@@ -217,7 +233,7 @@ namespace ft
         {
             alloc.destroy(temp);
         }
-        alloc.deallocate(this->pbegin, this->capacity);
+        alloc.deallocate(this->pbegin, this->capacity); // ? 
         this->pbegin = this->pend = this->capacity = 0;
     }
 
@@ -231,5 +247,11 @@ namespace ft
         ++this->pend;
     }
 
+    template<class T, class Allocator>
+    typename vector<T, Allocator>::allocator_type
+    vector<T, Allocator>::get_allocator() const
+    {
+        return allocator_type(this->alloc); // allocator_type - конструктор копирования аллокатора, allocate - приватная переменная
+    }
 }
 #endif
